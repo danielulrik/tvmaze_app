@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_plus/flutter_plus.dart';
 import 'package:tvmaze_app/dtos/tv_show_dto.dart';
 import 'package:tvmaze_app/util/colors_util.dart';
+import 'package:tvmaze_app/util/global.dart';
 import 'package:tvmaze_app/util/local_storage_util.dart';
 
 class TvShowWidget extends StatefulWidget {
@@ -12,7 +13,7 @@ class TvShowWidget extends StatefulWidget {
   final TvShowDto tvShow;
   Function(TvShowDto) onTap;
 
-  TvShowWidget({this.detailView = false, this.tvShow, this.onTap});
+  TvShowWidget({this.detailView = false, @required this.tvShow, this.onTap});
 
   @override
   _TvShowWidgetState createState() => _TvShowWidgetState();
@@ -24,9 +25,11 @@ class _TvShowWidgetState extends State<TvShowWidget> {
 
   @override
   void initState() {
-    localStorageUtil.isFavorite(widget.tvShow.id).then((isFavorite) {
-      setState(() => _isFavorite = isFavorite);
-    });
+    if (widget.detailView) {
+      localStorageUtil.isFavorite(widget.tvShow.id).then((isFavorite) {
+        setState(() => _isFavorite = isFavorite);
+      });
+    }
     super.initState();
   }
   @override
@@ -145,11 +148,9 @@ class _TvShowWidgetState extends State<TvShowWidget> {
     if (_isFavorite) {
       return ContainerPlus(
         onTap: () {
-          setState(() {
-            localStorageUtil.removeFavorite(showId).then((_) {
-              setState(() {
-                _isFavorite = false;
-              });
+          favoritesController.remove(widget.tvShow, (removed) {
+            setState(() {
+              _isFavorite = removed;
             });
           });
         },
@@ -180,9 +181,9 @@ class _TvShowWidgetState extends State<TvShowWidget> {
 
     return ContainerPlus(
       onTap: () {
-        localStorageUtil.addToFavorites(showId).then((_) {
+        favoritesController.add(widget.tvShow, (added) {
           setState(() {
-            _isFavorite = true;
+            _isFavorite = added;
           });
         });
       },

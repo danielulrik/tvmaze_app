@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_plus/flutter_plus.dart';
 import 'package:tvmaze_app/controllers/tv_shows_controller.dart';
+import 'package:tvmaze_app/screens/favorites_screen.dart';
 import 'package:tvmaze_app/screens/tv_show_screen.dart';
 import 'package:tvmaze_app/util/colors_util.dart';
+import 'package:tvmaze_app/util/global.dart';
 import 'package:tvmaze_app/widgets/infinite_list_widget.dart';
 import 'package:tvmaze_app/widgets/skeleton_list_widget.dart';
 import 'package:tvmaze_app/widgets/tv_show_widget.dart';
@@ -33,14 +35,26 @@ class _TvShowsScreenState extends State<TvShowsScreen> with WidgetsBindingObserv
   _buildAppBar(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(64.0),
-      child: AppBar(
-        elevation: 0,
-        backgroundColor: ColorsUtil.green,
-        centerTitle: false,
-        // titleSpacing: 16,
-        title: this._buildContainerSearch(context),
-      ),
+      child: Observer(builder: (_) {
+        return AppBar(
+          elevation: 0,
+          backgroundColor: ColorsUtil.green,
+          centerTitle: false,
+          // titleSpacing: 16,
+          title: this._buildContainerSearch(context),
+          actions: _buildActions(),
+        );
+      },),
     );
+  }
+
+  List<Widget> _buildActions() {
+    if (favoritesController.favorites.isEmpty) return [];
+    return [
+        IconButton(icon: Icon(Icons.favorite, color: ColorsUtil.white,), onPressed: () {
+          navigatorPlus.showModal(FavoritesScreen());
+        })
+      ];
   }
 
   _buildBody(BuildContext context) {
