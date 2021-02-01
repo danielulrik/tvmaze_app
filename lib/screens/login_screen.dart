@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:toast/toast.dart';
 import 'package:tvmaze_app/screens/tv_shows_screen.dart';
 import 'package:tvmaze_app/util/colors_util.dart';
+import 'package:tvmaze_app/util/local_storage_util.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _hasPin = hasPin;
       });
     });
+
 
     super.initState();
   }
@@ -135,6 +137,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     _canCheckBiometrics = canCheckBiometrics;
+
+    if (_canCheckBiometrics) {
+      _authenticate();
+    }
   }
 
   Future<void> _authenticate() async {
@@ -150,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (authenticated) {
+      localStorageUtil.storePin("generatedPin");
       loggedIn();
     }
   }
