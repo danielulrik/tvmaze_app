@@ -1,5 +1,7 @@
 # tvmaze_app
 
+Apk path: tvmaze_app/distribution/
+
 An application for listing TV series.
 
 # mobx
