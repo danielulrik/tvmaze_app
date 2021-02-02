@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:tvmaze_app/controllers/favorites_controller.dart';
 import 'package:tvmaze_app/screens/login_screen.dart';
+import 'package:tvmaze_app/screens/tab_bar_controller.dart';
 import 'package:tvmaze_app/util/colors_util.dart';
 import 'package:tvmaze_app/util/global_scaffold_util.dart';
 
@@ -40,6 +41,7 @@ class _AppScreenState extends State<AppScreen> {
   _customInit() async {
     GetIt getIt = GetIt.I;
     getIt.registerSingleton(FavoritesController());
+    getIt.registerSingleton(TabBarController());
 
     navigatorPlus.addKey(this._navigatorKey);
   }

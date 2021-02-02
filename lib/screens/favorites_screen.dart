@@ -39,6 +39,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> with WidgetsBindingOb
   }
 
   _buildBody() {
+    if (favoritesController.favorites.isEmpty) {
+      return Center(child: Text('No favorites yet.', style: TextStyle(color: ColorsUtil.green, fontSize: 30),),);
+    }
     return ListView.builder(
           shrinkWrap: true,
           itemCount: favoritesController.favorites.length,

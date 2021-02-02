@@ -42,7 +42,7 @@ class _TvShowsScreenState extends State<TvShowsScreen> with WidgetsBindingObserv
           centerTitle: false,
           // titleSpacing: 16,
           title: this._buildContainerSearch(context),
-          actions: _buildActions(),
+          // actions: _buildActions(),
         );
       },),
     );
@@ -101,7 +101,7 @@ class _TvShowsScreenState extends State<TvShowsScreen> with WidgetsBindingObserv
       maxLines: 1,
       backgroundColor: ColorsUtil.background,
       placeholder: TextPlus(
-        'Type in the name of the tv show...',
+        'Search TV Shows',
         color: ColorsUtil.blueGray,
       ),
       fontSize: 16,

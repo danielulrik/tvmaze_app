@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_plus/flutter_plus.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:toast/toast.dart';
+import 'package:tvmaze_app/screens/tab_bar_screen.dart';
 import 'package:tvmaze_app/screens/tv_shows_screen.dart';
 import 'package:tvmaze_app/util/colors_util.dart';
 import 'package:tvmaze_app/util/local_storage_util.dart';
@@ -56,6 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 children: [
                   TextFieldPlus(
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (search) async {
+                    await _checkPin();
+                  },
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     height: 60,
                     controller: _textEditingControllerPin,
@@ -102,22 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 onTap: () async {
-
-                  String pin = _textEditingControllerPin.text;
-
-                  if (pin.isEmpty) {
-                    Toast.show("Please type in your PIN", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER);
-                  } else {
-                    if (_hasPin) {
-                      String savedPin = await localStoragePlus.read("PIN");
-                      if (savedPin == pin) {
-                        loggedIn();
-                      }
-                    } else {
-                      localStoragePlus.write("PIN", pin);
-                      loggedIn();
-                    }
-                  }
+                  await _checkPin();
                 },
               ),
             ],
@@ -125,6 +115,26 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future _checkPin() async {
+    String pin = _textEditingControllerPin.text;
+    
+    if (pin.isEmpty) {
+      Toast.show("Please type in your PIN", context, duration: Toast.LENGTH_LONG, gravity:  Toast.CENTER);
+    } else {
+      if (_hasPin) {
+        String savedPin = await localStoragePlus.read("PIN");
+        if (savedPin == pin) {
+          loggedIn();
+        } else {
+          Toast.show("Please type in the correct your PIN", context, duration: Toast.LENGTH_LONG, gravity:  Toast.CENTER);
+        }
+      } else {
+        localStoragePlus.write("PIN", pin);
+        loggedIn();
+      }
+    }
   }
 
   Future<void> _checkBiometrics() async {
@@ -156,12 +166,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (authenticated) {
-      localStorageUtil.storePin("generatedPin");
+      localStorageUtil.storePin("12345");
       loggedIn();
     }
   }
 
   void loggedIn() {
-    navigatorPlus.show(TvShowsScreen());
+    navigatorPlus.show(TabBarScreen(), replace: true);
   }
 }

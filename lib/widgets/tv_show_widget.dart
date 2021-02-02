@@ -155,7 +155,7 @@ class _TvShowWidgetState extends State<TvShowWidget> {
           });
         },
         height: 30,
-        width: 160,
+        width: 170,
         margin: EdgeInsets.all(4),
         radius: RadiusPlus.all(16),
         color: ColorsUtil.green,
